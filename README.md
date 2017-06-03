@@ -1,1 +1,1 @@
-# obect-studentinfo
+# obec-studentinfo
