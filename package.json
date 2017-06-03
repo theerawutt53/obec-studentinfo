@@ -1,0 +1,24 @@
+{
+  "name": "obect-studentinfo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theerawutt53/obec-studentinfo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/theerawutt53/obec-studentinfo/issues"
+  },
+  "homepage": "https://github.com/theerawutt53/obec-studentinfo#readme",
+  "dependencies": {
+    "csv-stream": "^0.1.3",
+    "request": "^2.81.0",
+    "through2": "^2.0.3"
+  }
+}
