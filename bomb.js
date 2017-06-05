@@ -17,6 +17,11 @@ var stream = fs.createReadStream('./dmcSampleData/52030000_59_1.csv')
   .pipe(csv.createStream())
   .pipe(obecStudent.createParser('2016', '1'))
   .pipe(through2.obj(function(chunk1, encode, callback1) {
+    var objRead = {};
+    var keys = ['class', 'cid', 'host_id', 'year', 'semester'];
+    keys.forEach(function(key) {
+      objRead[key] = chunk1[key];
+    });
     util.get_dbs('obecStudents', function(err, db) {
       if (err) {
         console.log({
@@ -24,13 +29,13 @@ var stream = fs.createReadStream('./dmcSampleData/52030000_59_1.csv')
           'message': err
         });
       } else {
-        
-        var objRead = {};
-            var keys = ['class', 'cid', 'host_id', 'year', 'semester'];
-            keys.forEach(function(key) {
-              objRead[key] = chunk1[key];
-            });
-            
+        var str = uuid.v1();
+        var doc_id = str.split('-').join('');
+        util.put('obecStudents', doc_id, objRead, function(result) {
+          count++;
+          console.log(count, result);
+        });
+        /*
         db.indexes['cid'].createIndexStream({
             "start": [chunk1.cid],
             "end": [chunk1.cid + "xFF"],
@@ -39,7 +44,19 @@ var stream = fs.createReadStream('./dmcSampleData/52030000_59_1.csv')
           })
           .on('data', function(data) {
             console.log(data);
+            if (!data) {
+              util.put('obecStudents', doc_id, objRead, function(result) {
+                count++;
+                console.log(count, result);
+              });
+            } else {
+              console.log(data);
+            }
           })
+          .on('end', function() {
+            //console.log('Stream ended');
+          })
+*/
       }
     });
     callback1();
