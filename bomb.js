@@ -31,32 +31,32 @@ var stream = fs.createReadStream('./dmcSampleData/52030000_59_1.csv')
       } else {
         var str = uuid.v1();
         var doc_id = str.split('-').join('');
-        util.put('obecStudents', doc_id, objRead, function(result) {
-          count++;
-          console.log(count, result);
-        });
-        /*
-        db.indexes['cid'].createIndexStream({
-            "start": [chunk1.cid],
-            "end": [chunk1.cid + "xFF"],
-            "limit": -1,
-            "include_doc": true
-          })
-          .on('data', function(data) {
-            console.log(data);
-            if (!data) {
-              util.put('obecStudents', doc_id, objRead, function(result) {
-                count++;
-                console.log(count, result);
-              });
-            } else {
+        if (db.indexes['cid'].createIndexStream()) {
+          // console.log();
+          db.indexes['cid'].createIndexStream({
+              "start": [chunk1.cid],
+              "end": [chunk1.cid + "xFF"],
+              "limit": -1,
+              "include_doc": true
+            })
+            .on('data', function(data) {
               console.log(data);
-            }
-          })
-          .on('end', function() {
-            //console.log('Stream ended');
-          })
-*/
+              if (!data) {
+                console.log('!data');
+              } else {
+                console.log(data.value.key);
+              }
+            })
+            .on('end', function() {
+              //console.log('Stream ended');
+            })
+        } else {
+          // console.log('else');
+          util.put('obecStudents', doc_id, objRead, function(result) {
+            count++;
+            console.log(count, result);
+          });
+        }
       }
     });
     callback1();
