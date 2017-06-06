@@ -7,13 +7,13 @@ var config = require('./config');
 
 gulp.task('toJSON',function() {
   return gulp.src('../../dmc/dmcSampleData/*.csv')
-    .pipe(changed('../../dmc/build/exists'))
+  //   .pipe(changed('../../dmc/build/exists'))
     .pipe(parser())
     .pipe(check_exists({
        db_path:'./databases/obecStudents',
        index:config.index.obecStudents
     }))
-    .pipe(gulp.dest('../../dmc/build/exists'));
+  //  .pipe(gulp.dest('../../dmc/build/exists'));
 });
 
 gulp.task('default',['toJSON']);
