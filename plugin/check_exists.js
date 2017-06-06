@@ -25,6 +25,7 @@ module.exports = function(opts) {
     var self = this;
     var bufferStream = new stream.PassThrough();  
     var content = [];
+    var _new = 0;
     bufferStream.end(file.contents);
     bufferStream.pipe(jsonStream.parse('*'))
      .pipe(through2.obj(function(chunk,enc,cb) {
@@ -40,16 +41,18 @@ module.exports = function(opts) {
        }).on('end',function() {
          chunk._previous = _tmp;
          if(_tmp.length==0) {
-           gutil.log('new',chunk.cid);
+           _new++;
          }
          content.push(chunk);
          cb();
        });
      }))
      .on('finish',function() {
-       gutil.log(file.path);
-       file.contents = new Buffer(JSON.stringify(content));
-       callback(null,file);
+       gutil.log(file.path,_new,'/',content.length);
+       db.close(function() {
+         file.contents = new Buffer(JSON.stringify(content,null,2));
+         callback(null,file);
+       });
      });
     
   });

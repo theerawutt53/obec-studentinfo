@@ -6,7 +6,7 @@ var check_exists = require('./plugin/check_exists');
 var config = require('./config');
 
 gulp.task('toJSON',function() {
-  return gulp.src('../../dmc/dmcSampleData/52030000_59_1.csv')
+  return gulp.src('../../dmc/dmcSampleData/*.csv')
     .pipe(changed('../../dmc/build/exists'))
     .pipe(parser())
     .pipe(check_exists({
